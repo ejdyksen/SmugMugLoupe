@@ -10,8 +10,8 @@
   "content_scripts": [
     {
       "matches": ["http://*.smugmug.com/*"],
-      "css": ["smugmugloupe.css"],
-      "js": ["jquery-1.4.4.js", "jquery-ui-1.8.8.custom.min.js", "smugmugloupe.js"],
+      "css": ["css/smugmugloupe.css"],
+      "js": ["lib/jquery-1.4.4.js", "lib/jquery-ui-1.8.8.custom.min.js", "js/smugmugloupe.js"],
       "run_at": "document_idle"
     }
   ]
