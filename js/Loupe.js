@@ -25,6 +25,7 @@ var Loupe = (function ($) {
 
     setScale();
     $("#loupe").draggable();
+    $("#loupe").resizable();
     $("#loupe").bind("drag", my.onLoupeDrag);
     $("#loupe").css("top", -currentPhotoHeight);
     my.onLoupeDrag();
