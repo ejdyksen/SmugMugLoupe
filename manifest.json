@@ -11,7 +11,7 @@
     {
       "matches": ["http://*.smugmug.com/*"],
       "css": ["css/smugmugloupe.css"],
-      "js": ["lib/jquery-1.4.4.js", "lib/jquery-ui-1.8.8.custom.min.js", "js/smugmugloupe.js"],
+      "js": ["lib/jquery-1.4.4.js", "lib/jquery-ui-1.8.8.custom.min.js", "js/Loupe.js", "js/main.js"],
       "run_at": "document_idle"
     }
   ]
