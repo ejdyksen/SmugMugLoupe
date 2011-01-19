@@ -1,57 +1,53 @@
-var Loupe = (function ($) { 
+var Loupe = (function () { 
   var my = {};
-  var currentPhoto, currentPhotoHeight, scaleFactor, loupeFactor;
   
-  function setScale() {
-    currentPhotoHeight = parseInt($("#mainImage").height());
-    hugePhotoHeight = parseInt($("#huge").height());
+  // JQuery objects
+  var loupeWrapper, loupeDiv, hugeImg, container;
+  
+  // Numbers
+  var scaleFactor;
+  
+  // Public properties
+  my.image = null;
+  my.loupeImageUrl = 0;
+  
+  // Private methods
+  function onLoupeDrag() {
+    scaleFactor = hugeImg.height() / my.image.height();
+    // get the center of the loupe
+    y = parseInt(loupeDiv.css("top")) + (loupeDiv.height() / 2);
+    x = parseInt(loupeDiv.css("left")) + (loupeDiv.width() / 2);
 
-
-    scaleFactor = hugePhotoHeight / currentPhotoHeight;
-    loupeFactor = parseInt($("#loupe").css("height")) / scaleFactor;
-    loupeFactor = 1;
-    console.log("loupeFactor " + loupeFactor);
-    console.log("scaleFactor " + scaleFactor);
-
-
+    hugeImg.css("top", (-y * scaleFactor) + (loupeDiv.height() / 2));
+    hugeImg.css("left", (-x * scaleFactor) + (loupeDiv.width() / 2));
   }
   
+  // Public methods
   my.buildLoupe = function() {
-    loupeImageUrl = $(mainImage).attr("src").replace(/-(S|M|L|XL|X2|X3).jpg/, "-O.jpg")
-    parent = $("#ajaxPhotoBox div:first-child");
-
-    loupe = $("<div/>", { "id": "loupe" }).appendTo(parent);
-    huge = $("<img />", { "id": "huge", "src": loupeImageUrl }).appendTo(loupe);
-
-    setScale();
-    $("#loupe").draggable();
-    $("#loupe").resizable();
-    $("#loupe").bind("drag", my.onLoupeDrag);
-    $("#loupe").css("top", -currentPhotoHeight);
-    my.onLoupeDrag();
+    loupeWrapper = $("<div />", { 
+      "id": "loupeWrapper",
+      "height": my.image.outerHeight(),
+      "width": my.image.outerWidth()
+    });
+    
+    loupeDiv = $("<div />", { 
+      "id": "loupe" 
+    });
+    hugeImg = $("<img />", {
+      "id": "huge", 
+      "src": my.loupeImageUrl 
+    });
+    
+    my.image.wrap(loupeWrapper);
+    loupeDiv.appendTo($("#loupeWrapper")); // have to specify the selector like this...JQuery bug?
+    hugeImg.appendTo(loupeDiv);
+    
+    loupeDiv.draggable();
+    loupeDiv.resizable();
+    loupeDiv.bind("drag", onLoupeDrag);
+    loupeDiv.bind("resize", onLoupeDrag);
+    
+    onLoupeDrag();
   }
-  
-  
-  my.onLoupeDrag = function() {
-    setScale();
-    y = parseInt($("#loupe").css("top")) + currentPhotoHeight + (scaleFactor * loupeFactor);
-    x = parseInt($("#loupe").css("left")) + (scaleFactor * loupeFactor);
-
-    $(huge).css("top", -y * scaleFactor);
-    $(huge).css("left", -x * scaleFactor);
-  }
-  
-  
-  my.onPhotoChange = function(e) {
-    newPhoto = $("#mainImage").attr("src");
-
-    if (newPhoto != currentPhoto) {
-      currentPhoto = newPhoto;
-      $("#loupe").remove();
-
-      my.buildLoupe();
-    }
-  }
-  
   return my;
-})(jQuery);
+})();
